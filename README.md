@@ -1,83 +1,156 @@
-Medical PDF Analyzer
+# Medical PDF Analyzer
 
 A Python script that extracts text from medical PDF documents and generates a combined summary.
 
-The tool:
+## Overview
 
-Reads medical PDFs from a folder
+This tool:
 
-Extracts text directly from the PDF when available
+- Reads medical PDFs from a folder
+- Extracts text directly from PDFs when available
+- Uses OCR (Tesseract) for scanned documents
+- Saves extracted text into `.txt` files
+- Generates a **single combined summary** of all documents using an LLM
+- Designed for **Polish medical documents** with **Russian summary output**
 
-Uses OCR (Tesseract) for scanned documents
+---
 
-Saves extracted text into .txt files
+# Installation
 
-Generates a single combined summary of all documents using an LLM
+## 1. Install Python dependencies
 
-Designed for Polish medical documents with a Russian summary output.
-
-Installation
-
-Install Python dependencies:
-
+```bash
 pip install -r requirements.txt
+```
 
-Example requirements.txt:
+Example `requirements.txt`:
 
+```
 pytesseract
 PyPDF2
 pdf2image
 requests
-OCR Setup
-Windows
+```
+
+---
+
+# OCR Setup
+
+## Windows
 
 Install:
 
-Tesseract
+**Tesseract**
 https://github.com/tesseract-ocr/tesseract
 
-Poppler
+**Poppler**
 https://github.com/oschwartz10612/poppler-windows
 
 Set environment variables:
 
+```bash
 set TESSERACT_PATH=C:\Program Files\Tesseract-OCR\tesseract.exe
 set POPPLER_PATH=C:\Program Files\poppler-xx\Library\bin
-Linux
+```
+
+---
+
+## Linux
+
+```bash
 sudo apt install tesseract-ocr
 sudo apt install poppler-utils
-Mac
+```
+
+---
+
+## Mac
+
+```bash
 brew install tesseract
 brew install poppler
-Environment Variables
-OPENAI_API_KEY   OpenAI API key for summary generation
-TESSERACT_PATH   Path to Tesseract executable
-POPPLER_PATH     Path to Poppler binaries
+```
+
+---
+
+# Environment Variables
+
+| Variable | Description |
+|--------|--------|
+| `OPENAI_API_KEY` | OpenAI API key used for summary generation |
+| `TESSERACT_PATH` | Path to Tesseract executable |
+| `POPPLER_PATH` | Path to Poppler binaries |
 
 Example:
 
+```bash
 export OPENAI_API_KEY=your_api_key
-Usage
+```
 
-Place PDF files in the pdf folder.
+---
 
-Run:
+# Usage
 
+Place PDF files in the `pdf` folder.
+
+Run the script:
+
+```bash
 python read_pdfs.py
+```
 
-Outputs:
+---
 
+# Output
+
+```
 txt/          extracted text files
 summary.txt   combined medical summary
-Options
---input        input PDF directory
---output       output txt directory
---mode         extraction mode: auto | native | ocr
---llm-model    LLM model (default: gpt-4o-mini)
---no-llm       disable AI summary
+```
 
-Example:
+---
 
+# Options
+
+| Option | Description |
+|------|------|
+| `--input` | Input PDF directory |
+| `--output` | Output text directory |
+| `--mode` | Extraction mode: `auto` \| `native` \| `ocr` |
+| `--llm-model` | LLM model (default: `gpt-4o-mini`) |
+| `--no-llm` | Disable AI summary |
+
+---
+
+# Example
+
+Run OCR mode explicitly:
+
+```bash
 python read_pdfs.py --mode ocr
+```
 
-The script automatically chooses between native PDF text extraction and OCR, processes PDFs in parallel, and produces a single summary based only on document content.
+---
+
+# How It Works
+
+The script:
+
+1. Detects PDFs in the input folder
+2. Attempts native text extraction
+3. Falls back to OCR if necessary
+4. Saves text from each document
+5. Generates a **single medical summary** based only on document content
+
+Processing is **parallelized**, making it efficient even for large document sets.
+
+---
+
+# Use Case
+
+The tool is designed for:
+
+- organizing medical records
+- extracting text from scanned hospital documents
+- preparing summaries for doctors
+- consolidating medical history into a single report
